@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Arshi Gupta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Keyframe Animations */
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes bloom {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes vineGrow {
+            from { height: 0; }
+            to { height: 200px; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            background-color: #fdf2f8; /* Soft pink background */
+        }
+
+        .font-script { font-family: 'Dancing Script', cursive; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+
+        .vine-decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .swaying-element { animation: sway 4s ease-in-out infinite; }
+        .floating-element { animation: float 6s ease-in-out infinite; }
+
+        /* The Pull Cord (Vine Style) */
+        .pull-cord-container {
+            position: fixed;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            cursor: pointer;
+            transition: top 0.3s ease;
+        }
+        .pull-cord-container:active { top: 0px; }
+        
+        .vine-rope {
+            width: 4px;
+            height: 150px;
+            background: #4ade80;
+            margin: 0 auto;
+            position: relative;
+            background-image: linear-gradient(to bottom, #22c55e, #15803d);
+            border-radius: 0 0 10px 10px;
+        }
+        .vine-leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #22c55e;
+            border-radius: 20px 0;
+        }
+        
+        .tag {
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-family: 'Playfair Display', serif;
+            color: #be185d;
+            border: 1px solid #fbcfe8;
+        }
+
+        /* Interactive Garden */
+        .flower {
+            position: absolute;
+            pointer-events: none;
+            animation: bloom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            z-index: 5;
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .hidden-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .visible-section {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 1s ease forwards;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <div id="pull-cord" class="pull-cord-container floating-element" onclick="revealSite()">
+        <div class="vine-rope">
+            <div class="vine-leaf" style="top: 20px; left: -15px; transform: rotate(-45deg);"></div>
+            <div class="vine-leaf" style="top: 50px; right: -15px; transform: rotate(45deg);"></div>
+            <div class="vine-leaf" style="top: 80px; left: -15px; transform: rotate(-45deg);"></div>
+            <div class="vine-leaf" style="top: 110px; right: -15px; transform: rotate(45deg);"></div>
+        </div>
+        <div class="tag">
+            <span class="text-sm">Pull for a surprise, Arshi</span>
+            <div class="text-xs text-pink-400 text-center mt-1">↓ Click me ↓</div>
+        </div>
+    </div>
+
+    <!-- Intro Screen -->
+    <div id="intro-screen" class="h-screen w-full flex flex-col items-center justify-center relative overflow-hidden">
+        <h1 class="text-5xl md:text-7xl font-script text-pink-600 z-20 text-center px-4 leading-tight">
+            Hey Arshi Gupta...
+        </h1>
+        <p class="mt-4 text-green-700 font-serif z-20 text-lg">I made something special for you.</p>
+        
+        <!-- Decorative SVG Vines Background -->
+        <svg class="absolute bottom-0 left-0 w-64 h-64 text-green-300 opacity-50 z-0 swaying-element" viewBox="0 0 100 100" fill="currentColor">
+            <path d="M50 100 Q40 50 20 20 T0 0 M50 100 Q60 50 80 20 T100 0" stroke="currentColor" stroke-width="2" fill="none"/>
+            <circle cx="20" cy="20" r="5" fill="#fbcfe8" />
+            <circle cx="80" cy="20" r="5" fill="#fbcfe8" />
+        </svg>
+        <svg class="absolute top-0 right-0 w-64 h-64 text-green-300 opacity-50 z-0 swaying-element" style="transform: rotate(180deg);" viewBox="0 0 100 100" fill="currentColor">
+            <path d="M50 100 Q40 50 20 20 T0 0 M50 100 Q60 50 80 20 T100 0" stroke="currentColor" stroke-width="2" fill="none"/>
+            <circle cx="20" cy="20" r="5" fill="#fbcfe8" />
+        </svg>
+    </div>
+
+    <!-- Main Content (Hidden Initially) -->
+    <div id="main-content" class="hidden-section min-h-screen pb-20">
+        
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col items-center justify-center p-4 relative">
+            <div class="glass-card p-8 md:p-12 rounded-3xl max-w-2xl w-full text-center relative z-20 border-2 border-pink-100">
+                <div class="absolute -top-10 -left-10 text-6xl swaying-element">🌸</div>
+                <div class="absolute -bottom-10 -right-10 text-6xl swaying-element" style="animation-delay: 1s;">🌿</div>
+                
+                <h2 class="text-4xl md:text-6xl font-script text-pink-600 mb-6">Happy Valentine's Day!</h2>
+                <p class="text-lg md:text-xl text-gray-600 font-serif mb-8 leading-relaxed">
+                    To the most beautiful girl, <strong>Arshi (My Princess)</strong>.<br>
+                    You make my world bloom like a garden in spring.
+                </p>
+
+                <!-- Timer -->
+                <div class="bg-pink-50 rounded-xl p-4 mb-8">
+                    <p class="text-sm text-gray-500 uppercase tracking-widest mb-2">We've been blooming for</p>
+                    <div id="timer" class="grid grid-cols-4 gap-2 font-mono text-pink-600 font-bold text-lg md:text-2xl">
+                        <div><span id="days">00</span><div class="text-xs font-sans text-gray-400">DAYS</div></div>
+                        <div><span id="hours">00</span><div class="text-xs font-sans text-gray-400">HRS</div></div>
+                        <div><span id="minutes">00</span><div class="text-xs font-sans text-gray-400">MINS</div></div>
+                        <div><span id="seconds">00</span><div class="text-xs font-sans text-gray-400">SECS</div></div>
+                    </div>
+                </div>
+
+                <!-- The Question -->
+                <div id="question-container" class="mt-10 relative h-32">
+                    <h3 class="text-2xl font-serif text-green-800 mb-6">Will you be my Valentine?</h3>
+                    <div class="flex justify-center gap-8">
+                        <button onclick="handleYesClick()" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl transform transition hover:scale-110 active:scale-95 z-30">
+                            YES! 💖
+                        </button>
+                        <button id="no-btn" onmouseover="moveNoButton()" onclick="moveNoButton()" class="bg-gray-200 text-gray-600 px-8 py-3 rounded-full font-bold shadow transition absolute right-1/3 md:right-1/4 z-20">
+                            No 🙈
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Success Message (Hidden) -->
+                <div id="success-msg" class="hidden mt-8 transform transition-all duration-500 scale-0">
+                    <p class="text-3xl font-script text-rose-600">Yay! I love you so much! 💖</p>
+                    <p class="text-md text-gray-500 mt-2">Check below for our memories...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-20 px-4 max-w-6xl mx-auto">
+            <h3 class="text-center font-serif text-3xl text-green-800 mb-12 flex items-center justify-center gap-3">
+                <span class="text-4xl">🍃</span> Our Garden of Memories <span class="text-4xl">🍃</span>
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Photo Card 1 -->
+                <div class="glass-card p-4 rounded-xl transform rotate-2 hover:rotate-0 transition duration-300">
+                    <div class="bg-gray-200 h-64 rounded-lg overflow-hidden relative group">
+                        <!-- Placeholder Image -->
+                        <img src="cute.jpg" alt="Cute Memory" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-center font-script text-xl mt-4 text-pink-600">Us looking cute</p>
+                </div>
+
+                <!-- Photo Card 2 -->
+                <div class="glass-card p-4 rounded-xl transform -rotate-1 hover:rotate-0 transition duration-300">
+                    <div class="bg-gray-200 h-64 rounded-lg overflow-hidden relative">
+                         <!-- Placeholder Image -->
+                        <img src="date.jpg" alt="Flower Date" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-center font-script text-xl mt-4 text-pink-600">Best Date Ever</p>
+                </div>
+
+                <!-- Photo Card 3 -->
+                <div class="glass-card p-4 rounded-xl transform rotate-3 hover:rotate-0 transition duration-300">
+                    <div class="bg-gray-200 h-64 rounded-lg overflow-hidden relative">
+                         <!-- Placeholder Image -->
+                        <img src="love.jpg" alt="Love" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-center font-script text-xl mt-4 text-pink-600">Forever & Always</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reasons Section -->
+        <section class="py-20 px-4 text-center">
+            <div class="max-w-xl mx-auto glass-card p-8 rounded-full border-4 border-double border-green-200">
+                <h3 class="font-serif text-2xl text-green-900 mb-6">Why I Love You</h3>
+                <div id="reason-display" class="min-h-[100px] flex items-center justify-center">
+                    <p class="text-xl font-script text-pink-700 transition-opacity duration-500" id="reason-text">Your smile lights up my whole world.</p>
+                </div>
+                <div class="flex justify-center gap-2 mt-4">
+                    <button onclick="prevReason()" class="p-2 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-600">←</button>
+                    <button onclick="nextReason()" class="p-2 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-600">→</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center pb-10 text-green-600 font-serif text-sm">
+            <p>Made with 💖 for Arshi Gupta</p>
+            <p class="text-xs opacity-50 mt-2">Click anywhere to plant a flower</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const startDate = new Date("2024-08-06"); // CHANGE THIS DATE to your relationship start date
+        const reasons = [
+            "Your smile lights up my whole world.",
+            "The way you care for everyone around you.",
+            "Your beautiful eyes that I could get lost in.",
+            "How you make even boring days exciting.",
+            "Just being you, Arshi.",
+            "The way you laugh at my bad jokes."
+        ];
+
+        // --- INTERACTION: Pull Cord ---
+        function revealSite() {
+            const cord = document.getElementById('pull-cord');
+            const intro = document.getElementById('intro-screen');
+            const main = document.getElementById('main-content');
+            
+            // Animation for cord pull
+            cord.style.top = '100px';
+            setTimeout(() => {
+                cord.style.top = '-1000px'; // Fly away
+                intro.style.transition = 'opacity 1s, transform 1s';
+                intro.style.opacity = '0';
+                intro.style.transform = 'translateY(-100%)';
+                
+                setTimeout(() => {
+                    intro.style.display = 'none';
+                    main.classList.remove('hidden-section');
+                    main.classList.add('visible-section');
+                    startConfetti(true); // Light confetti on open
+                }, 800);
+            }, 300);
+        }
+
+        // --- INTERACTION: No Button Chase ---
+        const noBtn = document.getElementById('no-btn');
+        let hoverCount = 0;
+
+        function moveNoButton() {
+            const container = document.getElementById('question-container');
+            const containerRect = container.getBoundingClientRect();
+            
+            // Calculate random position within container
+            const maxX = containerRect.width - noBtn.offsetWidth;
+            const maxY = containerRect.height - noBtn.offsetHeight;
+            
+            let randomX = Math.random() * maxX;
+            let randomY = Math.random() * maxY;
+
+            // Make sure it doesn't overlap too much with Yes button
+            // (Simple logic: just keep moving)
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+            
+            hoverCount++;
+            if (hoverCount == 1) {
+                noBtn.innerText = "Are you sure? 🙈";
+            }
+            else if (hoverCount == 2) {
+                noBtn.innerText = "Please? 🙈";
+            }
+            else if (hoverCount == 4) {
+                noBtn.innerText = "Gandii baat!!!";
+            }
+             else if (hoverCount == 5) {
+                noBtn.innerText = "Okay, you win... 🙈";
+            }
+            else if (hoverCount == 6) {
+                noBtn.innerText = "Betaaa, Ab No button gayab";
+            }
+            else if (hoverCount >= 7) {
+                noBtn.style.display = 'none';
+            }
+        }
+
+        // --- INTERACTION: Yes Button ---
+        function handleYesClick() {
+            const qContainer = document.getElementById('question-container');
+            const successMsg = document.getElementById('success-msg');
+            
+            qContainer.innerHTML = ''; // Remove buttons
+            successMsg.classList.remove('hidden');
+            successMsg.classList.remove('scale-0');
+            successMsg.classList.add('scale-100');
+            
+            startConfetti(false); // Heavy confetti
+        }
+
+        // --- TIMER LOGIC ---
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / 1000 / 60) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // --- REASONS CAROUSEL ---
+        let currentReason = 0;
+        const reasonText = document.getElementById('reason-text');
+        
+        function updateReason() {
+            reasonText.style.opacity = 0;
+            setTimeout(() => {
+                reasonText.innerText = reasons[currentReason];
+                reasonText.style.opacity = 1;
+            }, 500);
+        }
+
+        function nextReason() {
+            currentReason = (currentReason + 1) % reasons.length;
+            updateReason();
+        }
+        
+        function prevReason() {
+            currentReason = (currentReason - 1 + reasons.length) % reasons.length;
+            updateReason();
+        }
+
+        // --- CLICK TO GROW FLOWERS ---
+        const flowerEmojis = ['🌸', '🌹', '🌺', '🌻', '🌼', '🌷', '🌿', '🌱'];
+        
+        document.addEventListener('click', (e) => {
+            // Don't spawn flowers on buttons
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.id === 'pull-cord') return;
+
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            flower.innerText = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+            flower.style.left = `${e.pageX - 15}px`;
+            flower.style.top = `${e.pageY - 15}px`;
+            flower.style.fontSize = `${Math.random() * 20 + 20}px`;
+            flower.style.transform = `rotate(${Math.random() * 360}deg)`;
+            
+            document.body.appendChild(flower);
+            
+            // Remove after animation
+            setTimeout(() => {
+                flower.remove();
+            }, 5000);
+        });
+
+        // --- CANVAS CONFETTI & PETALS ---
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(isHeavy) {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.size = Math.random() * 10 + 5;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 3 + (isHeavy ? 5 : 1);
+                this.color = `hsl(${Math.random() * 60 + 320}, 100%, 70%)`; // Pink/Red Hues
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 2 - 1;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+                if (this.y > canvas.height) {
+                    this.y = -20;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.fillStyle = this.color;
+                
+                // Draw petal shape
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        }
+
+        function startConfetti(isLight) {
+            const count = isLight ? 30 : 150;
+            particles = [];
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(!isLight));
+            }
+            
+            if (animationId) cancelAnimationFrame(animationId);
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Start with light petals
+        startConfetti(true);
+
+    </script>
+</body>
+</html>
